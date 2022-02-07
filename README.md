@@ -1,6 +1,10 @@
 # chat_app
 
-A new Flutter project.
+Chat Application using Firebase
+
+
+https://user-images.githubusercontent.com/98650213/152855627-d142b08f-66fb-4e6a-b1d6-7617bf9390a1.mp4
+
 
 ## Getting Started
 
