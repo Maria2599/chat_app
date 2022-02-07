@@ -14,9 +14,13 @@ class LoginScreen extends StatefulWidget {
 //mixin allow class to inherit from more than one class
 
 class _LoginScreen extends State<LoginScreen> {
-  final _auth=FirebaseAuth.instance;
+  bool isHidden = false;
+  final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
+
+  ChangePassword() => setState(() => isHidden = !isHidden);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +35,7 @@ class _LoginScreen extends State<LoginScreen> {
                 child: Hero(
                   tag: 'logo',
                   child: Container(
-                    child:  Image.asset("images/logo.jfif"),
+                    child: Image.asset("images/logo.jfif"),
                     height: 150.0,
                   ),
                 ),
@@ -42,28 +46,42 @@ class _LoginScreen extends State<LoginScreen> {
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
-                onChanged: (value) {email=value;},
-                decoration: TextFieldDecoration.copyWith(hintText: "Enter your Email"),
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration:
+                    TextFieldDecoration.copyWith(hintText: "Enter your Email"),
               ),
               SizedBox(
                 height: 8.0,
               ),
               TextField(
-                obscureText: true ,
+                obscureText: isHidden,
                 textAlign: TextAlign.center,
-                onChanged: (value) {password=value;},
-                decoration: TextFieldDecoration.copyWith(hintText: "Enter your Password"),
+                onChanged: (value) {
+                  password = value;
+                },
+                decoration: TextFieldDecoration.copyWith(
+                    hintText: "Enter your Password",
+                    suffixIcon: IconButton(
+                      onPressed: ChangePassword,
+                      icon: isHidden
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                    )),
               ),
               RoundedButton(
-                onPressedd: () async{
-                  try{
-                  final user=await _auth.signInWithEmailAndPassword(email: email, password: password);
-                  if(user!=null) {
-                    Navigator.pushNamed(context, ChatScreen.id);
-                  }}catch(e){
+                onPressedd: () async {
+                  try {
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+                    if (user != null) {
+                      Navigator.pushNamed(context, ChatScreen.id);
+                    }
+                  } catch (e) {
                     print(e);
                   }
-                  },
+                },
                 title: "Log In",
                 color: Colors.lightBlueAccent,
               ),
